@@ -1,27 +1,20 @@
 FROM ubuntu:22.04
 
-# تثبيت nginx و ffmpeg و curl
+# تثبيت nginx و ffmpeg
 RUN apt-get update && apt-get install -y \
-    nginx \
-    ffmpeg \
-    curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    nginx ffmpeg curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# مجلد العمل
 WORKDIR /app
 
-# نسخ الملفات من الجذر
+# نسخ الملفات
 COPY start.sh /app/start.sh
-COPY nginx.conf.template /app/nginx.conf.template
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY hls /app/hls
 
 RUN chmod +x /app/start.sh
 
-# إنشاء مجلدات مؤقتة لـ nginx logs و temp
-RUN mkdir -p /tmp/client_temp /tmp/proxy_temp /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp
+EXPOSE 5000
 
-# فتح البورت (Koyeb يستخدم متغير PORT)
-EXPOSE 80
-
-# تشغيل start.sh عند بدء الحاوية
 CMD ["/app/start.sh"]
