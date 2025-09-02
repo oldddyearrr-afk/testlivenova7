@@ -10,11 +10,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# نسخ الملفات مباشرة من الجذر
+# نسخ الملفات من الجذر
 COPY start.sh /app/start.sh
 COPY nginx.conf.template /app/nginx.conf.template
 COPY hls /app/hls
 
+# اعطاء صلاحية التنفيذ لـ start.sh
 RUN chmod +x /app/start.sh
 
 # إنشاء مجلدات مؤقتة لـ nginx logs و temp
