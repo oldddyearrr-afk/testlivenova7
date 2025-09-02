@@ -15,7 +15,6 @@ COPY start.sh /app/start.sh
 COPY nginx.conf.template /app/nginx.conf.template
 COPY hls /app/hls
 
-# اعطاء صلاحية التنفيذ لـ start.sh
 RUN chmod +x /app/start.sh
 
 # إنشاء مجلدات مؤقتة لـ nginx logs و temp
