@@ -1,20 +1,35 @@
 FROM ubuntu:22.04
 
-# تثبيت nginx و ffmpeg
-RUN apt-get update && apt-get install -y \
-    nginx ffmpeg curl && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+ENV PORT=10000
 
-# مجلد العمل
+# تثبيت الحزم المطلوبة
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    nginx \
+    bash \
+    curl \
+    ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# إنشاء مجلد العمل
 WORKDIR /app
 
-# نسخ الملفات
-COPY start.sh /app/start.sh
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY hls /app/hls
+# نسخ جميع الملفات
+COPY . .
 
-RUN chmod +x /app/start.sh
+# إنشاء المجلدات المطلوبة
+RUN mkdir -p stream/hls stream/logs \
+    && mkdir -p /var/log/nginx /var/lib/nginx /run \
+    && chmod +x perfect_stream.sh \
+    && chmod 755 stream/hls
 
-EXPOSE 5000
+# تم حذف نسخ nginx.conf لأن السكريبت ينشئه ديناميكياً
 
-CMD ["/app/start.sh"]
+# تعريف البورت
+EXPOSE 10000
+
+# تشغيل التطبيق
+CMD ["./perfect_stream.sh"]
