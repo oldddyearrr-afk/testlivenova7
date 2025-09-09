@@ -11,5 +11,8 @@ mkdir -p /var/log/nginx /var/lib/nginx /run
 chmod +x perfect_stream.sh
 chmod 755 stream/hls
 
+# تعيين HOST ليكون متاح للعموم
+export HOST=0.0.0.0
+
 # تشغيل السكريبت الرئيسي
 exec ./perfect_stream.sh
